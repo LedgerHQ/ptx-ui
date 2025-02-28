@@ -1,0 +1,78 @@
+name: Verify
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Get pnpm store directory
+        id: pnpm-store
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: Install dependenciess
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Lint
+        run: pnpm lint
+
+      - name: Run TypeScript
+        run: pnpm tsc
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run Jest
+        run: pnpm test:coverage
+
+      # https://docs.sonarsource.com/sonarqube-cloud/advanced-setup/ci-based-analysis/github-actions-for-sonarcloud/ 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env: 
+          GITHUB_TOKEN:  ${{ secrets.CI_BOT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # https://www.chromatic.com/docs/github-actions
+      - name: Run Chromatic
+        uses: chromaui/action@latest
+        id: chromatic
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+      # https://storybook.js.org/docs/writing-tests/test-runner#run-against-deployed-storybooks-via-github-actions-deployment
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run accessibility test
+        run: pnpm test-a11y
+        env:
+          TARGET_URL: '${{ steps.chromatic.outputs.storybookUrl }}'
