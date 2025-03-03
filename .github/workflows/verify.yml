@@ -67,6 +67,9 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
       # https://storybook.js.org/docs/writing-tests/test-runner#run-against-deployed-storybooks-via-github-actions-deployment
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
       - name: Run accessibility test
         run: pnpm test-a11y
         env:
