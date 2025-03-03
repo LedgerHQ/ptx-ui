@@ -1,6 +1,6 @@
 # @ledgerhq/ptx-ui
 
-<!-- [![storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://main--<chromatic_id>.chromatic.com) [![chromatic](https://img.shields.io/badge/chromatic-grey?logo=chromatic&labelColor=%232E3438)](https://www.chromatic.com/library?appId=<chromatic_id>) -->
+[![storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://main--67c58c8d579862e4290ccbfe.chromatic.com) [![chromatic](https://img.shields.io/badge/chromatic-grey?logo=chromatic&labelColor=%232E3438)](https://www.chromatic.com/library?appId=67c58c8d579862e4290ccbfe)
 
 This package provides an internal React component library for PTX live apps.
 
@@ -44,6 +44,6 @@ Test local changes within live apps with `pnpm-link` or `file:` protocol. Detail
 
 - **SonarCloud** analysis will highlight issues with code and test coverage. Some issues may be minor and will allow the Quality Gate to pass but it's good practice to fix those as they show up before merging.
 
-<!-- - **Chromatic** visual regression -->
+- **Chromatic** visual regression tests requiring any changes to be reviewed and approved
 
-<!-- - Accessibility tests based on standard WCAG guidelines using **@storybook/addon-a11y** -->
+- Accessibility tests based on standard WCAG guidelines using **@storybook/addon-a11y**
