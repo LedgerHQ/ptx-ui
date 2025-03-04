@@ -44,6 +44,6 @@ Test local changes within live apps with `pnpm-link` or `file:` protocol. Detail
 
 - **SonarCloud** analysis will highlight issues with code and test coverage. Some issues may be minor and will allow the Quality Gate to pass but it's good practice to fix those as they show up before merging.
 
-- **Chromatic** visual regression tests requiring any changes to be reviewed and approved
+- **Chromatic** publishes the Storybook and runs visual regression tests requiring any changes to be reviewed and approved. The PR Storybook and test build can be accessed through the related Github checks.
 
 - Accessibility tests based on standard WCAG guidelines using **@storybook/addon-a11y**
