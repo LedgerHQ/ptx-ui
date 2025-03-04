@@ -10,7 +10,7 @@ type ExampleComponentProps = {
 
 const Wrapper = styled(Flex)<ExampleComponentProps>`
   gap: 5px;
-  padding: 30px 60px;
+  padding: 20px 40px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
