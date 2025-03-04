@@ -31,7 +31,7 @@ const ExampleComponent = (props: ExampleComponentProps) => {
 
   return (
     <Wrapper role="banner" {...props}>
-      <Text variant="subtitle">{text} test chromatic</Text>
+      <Text variant="subtitle">{text}</Text>
       <Icon name="ChevronRight" color={colors.neutral.c100} />
     </Wrapper>
   );
