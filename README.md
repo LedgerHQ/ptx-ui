@@ -36,7 +36,14 @@ Develop directly in Storybook where you can easily switch between themes and bre
 pnpm storybook
 ```
 
-Test local changes within live apps with `pnpm-link` or `file:` protocol. Details can be found here: https://pnpm.io/cli/link#whats-the-difference-between-pnpm-link-and-using-the-file-protocol.
+Test local changes within live apps before releasing by running the [link-pkg](./link-pkg.sh) script to create and link a package bundle:
+
+```bash
+pnpm link-pkg
+
+# Give the file permission to execute if needed:
+chmod +x link-pkg.sh
+```
 
 **Pipeline checks:**
 
