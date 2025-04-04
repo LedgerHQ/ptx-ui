@@ -1,0 +1,65 @@
+name: "Release ptx-ui package"
+
+on:
+  push:
+    branches:
+      - main 
+  workflow_dispatch:
+
+# 1. Permissions needed to be defined inside the workflow file
+permissions:
+  contents: read
+  id-token: write  # Mandatory for attestations
+  attestations: write  # Mandatory for attestations
+
+env:
+  NPM_REGISTRY: jfrog.ledgerlabs.net/artifactory/api/npm/ptx-npm-prod-public
+
+jobs:
+  publish:
+    runs-on: public-ledgerhq-shared-small
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.4.1
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the npm package
+        run: npm run build
+
+      # 2. Attestation action is used to attest the npm package
+      - name: Attest
+        uses: LedgerHQ/actions-security/actions/attest@actions/attest-1
+        with:
+          subject-path: dist
+
+      - name: Sign
+        uses: LedgerHQ/actions-security/actions/sign-blob@actions/sign-blob-1
+        with:
+          path: dist
+
+      - name: Login to JFrog Ledger
+        id: jfrog-login
+        uses: LedgerHQ/actions-security/actions/jfrog-login@actions/jfrog-login-1
+
+      - name: Configure npm authentication
+        run: |
+          echo "registry=https://${NPM_REGISTRY}/" > .npmrc
+          echo "//${NPM_REGISTRY}/:_authToken=${{ steps.jfrog-login.outputs.oidc-token }}" >> .npmrc
+          echo "//${NPM_REGISTRY}/:always-auth=true" >> .npmrc
+
+      - name: Publish package to JFrog Ledger with npm
+        run: |
+          npm publish
