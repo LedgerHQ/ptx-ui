@@ -54,7 +54,7 @@ jobs:
 
       # https://docs.sonarsource.com/sonarqube-cloud/advanced-setup/ci-based-analysis/github-actions-for-sonarcloud/ 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v6
         env: 
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
